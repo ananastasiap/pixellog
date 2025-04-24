@@ -17,8 +17,41 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { setQuery, setResults } from "../slices/searchSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { getGameDetails } from "@/api/rawgApi";
+import { cn } from "@/lib/utils";
+import { setSelectedGame } from "../slices/searchSlice";
 
 export const AddGameModal = () => {
+  const dispatch = useDispatch();
+  const query = useSelector((state) => state.search.query);
+  const results = useSelector((state) => state.search.results);
+  const selectedGame = useSelector((state) => state.search.selectedGame);
+  // const selectedStatus = useSelector((state) => state.search.selectedStatus);
+
+  const handleInputChange = (event) => {
+    dispatch(setQuery(event.target.value));
+  };
+
+  const handleSelectGame = (game) => {
+    dispatch(setSelectedGame(game));
+  };
+
+  useEffect(() => {
+    const fetchGamesDatails = async () => {
+      try {
+        const data = await getGameDetails(query);
+        dispatch(setResults(data.results));
+      } catch (error) {
+        console.error("Ошибка при поиске:", error);
+      }
+    };
+
+    fetchGamesDatails();
+  }, [query, dispatch]);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -36,7 +69,35 @@ export const AddGameModal = () => {
             <Label htmlFor="name" className="text-right">
               Название
             </Label>
-            <Input id="name" value="The Witcher 3" className="col-span-3" />
+            <Input
+              id="name"
+              value={query}
+              className="col-span-3"
+              placeholder="Введите название игры"
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="w-full">
+            {results.slice(0, 3).map((game) => (
+              <div
+                key={game.id}
+                onClick={() => handleSelectGame(game)}
+                className={cn(
+                  "flex flex-row gap-4 w-full border rounded p-2 mt-2 cursor-pointer",
+                  selectedGame?.id === game.id
+                    ? "border-green-500 bg-green-50"
+                    : "shadow-sm hover:bg-gray-50",
+                )}
+              >
+                <div className="basis-1/3 h-[50px] overflow-hidden rounded">
+                  <img src={game.background_image} alt={game.name} />
+                </div>
+                <div className="basis-2/3">
+                  <p className="font-semibold">{game.name}</p>
+                  <p className="text-sm text-muted-foreground">{game.released}</p>
+                </div>
+              </div>
+            ))}
           </div>
           <div className="w-full">
             <Select>

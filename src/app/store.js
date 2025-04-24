@@ -1,10 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-// import rootReducer from "./reducers";
+import searchReducer from "../components/slices/searchSlice.js";
 
-const store = configureStore({
-  // reducer: {
-  //   games: gamesReducer,
-  // },
+export const store = configureStore({
+  reducer: {
+    search: searchReducer,
+  },
 });
-
-export default store;
