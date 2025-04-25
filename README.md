@@ -14,3 +14,11 @@ If you are developing a production application, we recommend using TypeScript wi
 ## Explore RAWG Video Games Database API
 
 https://rawg.io/apidocs
+
+### что требуется доделать:
+
+[] КАРТОЧКА:
+
+- не повторяются
+- нельзя устанавливать без статуса
+-

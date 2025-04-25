@@ -17,19 +17,21 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { setQuery, setResults } from "../slices/searchSlice";
+import { setQuery, setResults, setSelectedStatus } from "../slices/searchSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getGameDetails } from "@/api/rawgApi";
 import { cn } from "@/lib/utils";
 import { setSelectedGame } from "../slices/searchSlice";
+import { addGame } from "../slices/gamesSlice";
+import { STATUS_LABELS } from "@/utils/helpers/statusLabels";
 
 export const AddGameModal = () => {
   const dispatch = useDispatch();
   const query = useSelector((state) => state.search.query);
   const results = useSelector((state) => state.search.results);
   const selectedGame = useSelector((state) => state.search.selectedGame);
-  // const selectedStatus = useSelector((state) => state.search.selectedStatus);
+  const selectedStatus = useSelector((state) => state.search.selectedStatus);
 
   const handleInputChange = (event) => {
     dispatch(setQuery(event.target.value));
@@ -40,7 +42,7 @@ export const AddGameModal = () => {
   };
 
   useEffect(() => {
-    const fetchGamesDatails = async () => {
+    const fetchGamesDetails = async () => {
       try {
         const data = await getGameDetails(query);
         dispatch(setResults(data.results));
@@ -49,7 +51,7 @@ export const AddGameModal = () => {
       }
     };
 
-    fetchGamesDatails();
+    fetchGamesDetails();
   }, [query, dispatch]);
 
   return (
@@ -100,20 +102,39 @@ export const AddGameModal = () => {
             ))}
           </div>
           <div className="w-full">
-            <Select>
+            <Select onValueChange={(value) => dispatch(setSelectedStatus(value))}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="статус" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="played">пройдена</SelectItem>
-                <SelectItem value="want">хочу пройти</SelectItem>
-                <SelectItem value="play">прохожу</SelectItem>
+                {Object.entries(STATUS_LABELS).map(([value, label]) => (
+                  <SelectItem key={value} value={value}>
+                    {label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit">добавить</Button>
+          <Button
+            type="submit"
+            onClick={() => {
+              console.log("Добавляем игру:", selectedGame, selectedStatus);
+              if (selectedGame && selectedStatus) {
+                dispatch(
+                  addGame({
+                    id: selectedGame.id,
+                    name: selectedGame.name,
+                    image: selectedGame.background_image,
+                    status: selectedStatus,
+                  }),
+                );
+              }
+            }}
+          >
+            добавить
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

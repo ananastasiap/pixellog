@@ -1,9 +1,14 @@
+import { useSelector } from "react-redux";
 import { GameCard } from "./GameCard";
 
 export const GameList = () => {
+  const games = useSelector((state) => state.games);
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-5">
-      <GameCard />
+    <div className="flex flex-row flex-wrap justify-center items-center items-stretch gap-4 mt-5">
+      {games?.map((game) => (
+        <GameCard key={game.id} image={game.image} name={game.name} status={game.status} />
+      ))}
     </div>
   );
 };
