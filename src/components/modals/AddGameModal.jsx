@@ -1,3 +1,7 @@
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getGameDetails } from "@/api/rawgApi";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,10 +22,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { setQuery, setResults, setSelectedStatus } from "../slices/searchSlice";
-import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { getGameDetails } from "@/api/rawgApi";
-import { cn } from "@/lib/utils";
 import { setSelectedGame } from "../slices/searchSlice";
 import { addGame } from "../slices/gamesSlice";
 import { STATUS_LABELS } from "@/utils/helpers/statusLabels";
@@ -32,6 +32,8 @@ export const AddGameModal = () => {
   const results = useSelector((state) => state.search.results);
   const selectedGame = useSelector((state) => state.search.selectedGame);
   const selectedStatus = useSelector((state) => state.search.selectedStatus);
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleInputChange = (event) => {
     dispatch(setQuery(event.target.value));
@@ -54,8 +56,22 @@ export const AddGameModal = () => {
     fetchGamesDetails();
   }, [query, dispatch]);
 
+  const handleAddGame = () => {
+    if (selectedGame && selectedStatus) {
+      dispatch(
+        addGame({
+          id: selectedGame.id,
+          name: selectedGame.name,
+          image: selectedGame.background_image,
+          status: selectedStatus,
+        }),
+      );
+      setIsOpen(false);
+    }
+  };
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="mt-10">
           + добавить игру
@@ -117,22 +133,7 @@ export const AddGameModal = () => {
           </div>
         </div>
         <DialogFooter>
-          <Button
-            type="submit"
-            onClick={() => {
-              console.log("Добавляем игру:", selectedGame, selectedStatus);
-              if (selectedGame && selectedStatus) {
-                dispatch(
-                  addGame({
-                    id: selectedGame.id,
-                    name: selectedGame.name,
-                    image: selectedGame.background_image,
-                    status: selectedStatus,
-                  }),
-                );
-              }
-            }}
-          >
+          <Button type="submit" onClick={handleAddGame}>
             добавить
           </Button>
         </DialogFooter>

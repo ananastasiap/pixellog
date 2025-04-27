@@ -134,3 +134,9 @@
 body {
   padding: 30px 70px;
 }
+
+body[data-scroll-locked] {
+  padding-left: 70px !important;
+  padding-top: 30px !important;
+  padding-right: 70px !important;
+}
