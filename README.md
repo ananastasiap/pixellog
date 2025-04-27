@@ -1,24 +1,62 @@
-# React + Vite
+# PIXELLOG 🎮
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![React](https://img.shields.io/badge/react-18.2.0-61DAFB?logo=react&logoColor=white)](https://react.dev/)
+[![Redux Toolkit](https://img.shields.io/badge/redux--toolkit-1.9.5-764ABC?logo=redux&logoColor=white)](https://redux-toolkit.js.org/)
+[![Tailwind CSS](https://img.shields.io/badge/tailwindcss-3.3.2-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Vite](https://img.shields.io/badge/vite-4.3.9-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![ESLint](https://img.shields.io/badge/eslint-8.56.0-4B32C3?logo=eslint&logoColor=white)](https://eslint.org/)
+[![Prettier](https://img.shields.io/badge/prettier-3.2.5-F7B93E?logo=prettier&logoColor=white)](https://prettier.io/)
+[![Husky](https://img.shields.io/badge/husky-9.0.11-1D3442?logo=github&logoColor=white)](https://typicode.github.io/husky)
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Описание
 
-## Expanding the ESLint configuration
+**PIXELLOG** — это простой проект-трекер для игр.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Функционал:
 
-## Explore RAWG Video Games Database API
+- Искать игры через RAWG API;
+- Добавлять их в список с выбранным статусом (прохожу / хочу пройти / пройдено)
+- Удалять игры из списка
+- Сохранять список игр в `localStorage` между сессиями с помощью `redux-persist`
 
-https://rawg.io/apidocs
+---
 
-### что требуется доделать:
+## Скрипты
 
-[] КАРТОЧКА:
+| Скрипт            | Описание                                |
+| ----------------- | --------------------------------------- |
+| `npm install`     | Установить зависимости проекта          |
+| `npm run dev`     | Запустить проект в режиме разработки    |
+| `npm run build`   | Собрать проект для продакшена           |
+| `npm run preview` | Локальный предпросмотр продакшен-сборки |
 
-- не повторяются
-- нельзя устанавливать без статуса
--
+---
+
+## Технологии
+
+- **React 18** — библиотека для построения интерфейсов
+- **Redux Toolkit** — удобная работа с состоянием
+- **Redux Persist** — сохранение состояния между сессиями
+- **Tailwind CSS** — утилитарные стили
+- **shadcn/ui** — готовые UI-компоненты на Tailwind
+- **Vite** — сборщик для быстрого старта
+- **ESLint** — автоматическая проверка кода
+- **Prettier** — автоформатирование кода
+- **Husky** — настройка гит-хуков для проверки кода перед коммитами
+
+---
+
+## API
+
+**RAWG Video Games Database API**
+
+- Документация: [https://rawg.io/apidocs](https://rawg.io/apidocs)
+- Используется для поиска игр по названию через открытый API.
+- Для работы нужен API-ключ:
+  добавить `.env` файл в корень проекта:
+
+```env
+VITE_RAWG_API_KEY=your_api_key_here
+```
